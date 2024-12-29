@@ -1,6 +1,7 @@
 import { WebSocket } from "ws";
 import { Game } from "./Game";
 import { Chess } from "chess.js";
+import { getConfigFileParsingDiagnostics } from "typescript";
 
 export class GameLogicManager{
     private globalId:number = 0;
@@ -12,15 +13,15 @@ export class GameLogicManager{
         this.globalId =0;
     }
 
-    //When the init game msg comes, then add the user to a game
+    // When the init game msg comes, then add the user to a game
     addUser(player1: WebSocket){
         
-        //1. Check if the waiting player is null 
+        // 1. Check if the waiting player is null 
         if(this.waitingPlayer == null){
             //2. If the waiting player is null, assign the waiting player to this websocket
             this.waitingPlayer = player1; 
         }
-        //3. If the waiting player is not null, make a new game, with player1 as the waiting player and the player 2 as
+        // 3. If the waiting player is not null, make a new game, with player1 as the waiting player and the player 2 as
         else{
             const id:number = this.globalId + 1;
             const newGame = new Game( player1, this.waitingPlayer);
@@ -29,7 +30,7 @@ export class GameLogicManager{
             console.log(newGame);
         }
 
-        // the player who has sent the request to init-game.
+        // The player who has sent the request to init-game.
 
     }  
 

@@ -26,10 +26,11 @@ export class Game{
             this.chessBoard.move(move);
         }
         catch(e){
-            player.send(JSON.stringify({
+            return player.send(JSON.stringify({
                 error: e
             }))
         }
+    
         //3. If the game is over. 
         if(this.chessBoard.isGameOver()){
             this.player1.emit(JSON.stringify({
@@ -42,25 +43,27 @@ export class Game{
             )
             return; 
         }
-        //4. notifying p2 after p1 is done making a move, and vice verca
-        if(this.chessMoves % 2 === 0){
-            console.log(this.chessMoves)
-            this.player2.send(JSON.stringify({
-                type: "move",
-                payload:move
-            })
-        )
-            this.chessMoves++;
-        }
-        else{
-            console.log(this.chessMoves)
+
+        //Send the updated board to both the players after one is done making a move.
+        try{
             this.player1.send(JSON.stringify({
                 type: "move",
-                payload:move
-            })
-        )
-            this.chessMoves++;
+                payload:this.chessBoard.ascii()
+            }))
+            this.player2.send(
+                JSON.stringify({
+                    type:"move",
+                    payload:this.chessBoard.ascii()
+                })
+            )
+        }
+        catch(e){
+            this.player1.send(JSON.stringify({
+                "msg" : e
+            }))
+            this.player2.send(JSON.stringify({
+                "msg" : e
+            }))
         }
     }
-    
 }

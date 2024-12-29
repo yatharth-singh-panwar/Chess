@@ -13,12 +13,11 @@ class Game {
         this.chessMoves = 0;
     }
     MovePlayer(player, move) {
-        //1. validate . Will be handled by the chess library itself. NO need to worry about it.
         try {
             this.chessBoard.move(move);
         }
         catch (e) {
-            player.send(JSON.stringify({
+            return player.send(JSON.stringify({
                 error: e
             }));
         }
@@ -32,22 +31,24 @@ class Game {
             }));
             return;
         }
-        //4. notifying p2 after p1 is done making a move, and vice verca
-        if (this.chessMoves % 2 === 0) {
-            console.log(this.chessMoves);
-            this.player2.send(JSON.stringify({
-                type: "move",
-                payload: move
-            }));
-            this.chessMoves++;
-        }
-        else {
-            console.log(this.chessMoves);
+        //Send the updated board to both the players after one is done making a move.
+        try {
             this.player1.send(JSON.stringify({
                 type: "move",
-                payload: move
+                payload: this.chessBoard.ascii()
             }));
-            this.chessMoves++;
+            this.player2.send(JSON.stringify({
+                type: "move",
+                payload: this.chessBoard.ascii()
+            }));
+        }
+        catch (e) {
+            this.player1.send(JSON.stringify({
+                "msg": e
+            }));
+            this.player2.send(JSON.stringify({
+                "msg": e
+            }));
         }
     }
 }

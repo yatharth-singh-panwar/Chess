@@ -18,6 +18,6 @@ wss.on("connection",function connection(ws){
             const move  = data.move;
             gameManager.HandleMovePlayer(ws, move);
         }
-    })
+    })  
     ws.send('Connection eshtabilished');
 })
