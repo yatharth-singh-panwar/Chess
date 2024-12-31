@@ -1,8 +1,5 @@
 import { WebSocket } from "ws";
 import { Game } from "./Game";
-import { Chess } from "chess.js";
-import { getConfigFileParsingDiagnostics } from "typescript";
-
 export class GameLogicManager{
     private globalId:number = 0;
     private waitingPlayer : WebSocket | null = null;

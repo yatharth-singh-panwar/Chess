@@ -8,8 +8,14 @@ class Game {
         this.player2 = player2;
         this.startTime = new Date();
         this.chessBoard = new chess_js_1.Chess();
-        this.player1.send("game has started, you are black");
-        this.player2.send("game has started, you are white");
+        this.player1.send(JSON.stringify({
+            type: "INIT_GAME",
+            status: "game has started, you are white"
+        }));
+        this.player2.send(JSON.stringify({
+            type: "INIT_GAME",
+            status: "game has started, you are black"
+        }));
         this.chessMoves = 0;
     }
     MovePlayer(player, move) {
@@ -17,13 +23,14 @@ class Game {
             this.chessBoard.move(move);
         }
         catch (e) {
+            console.log("first try catch exit");
             return player.send(JSON.stringify({
                 error: e
             }));
         }
         //3. If the game is over. 
         if (this.chessBoard.isGameOver()) {
-            this.player1.emit(JSON.stringify({
+            this.player1.send(JSON.stringify({
                 type: "game_over",
                 payload: {
                     winner: this.chessBoard.turn() === "w" ? "black" : "white"
@@ -35,14 +42,15 @@ class Game {
         try {
             this.player1.send(JSON.stringify({
                 type: "move",
-                payload: this.chessBoard.ascii()
+                payload: this.chessBoard.board()
             }));
             this.player2.send(JSON.stringify({
                 type: "move",
-                payload: this.chessBoard.ascii()
+                payload: this.chessBoard.board()
             }));
         }
         catch (e) {
+            console.log("2nd try catch error");
             this.player1.send(JSON.stringify({
                 "msg": e
             }));
@@ -50,6 +58,7 @@ class Game {
                 "msg": e
             }));
         }
+        console.log("Event occured successfully");
     }
 }
 exports.Game = Game;
