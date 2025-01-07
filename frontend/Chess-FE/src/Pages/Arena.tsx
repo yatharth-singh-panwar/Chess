@@ -15,16 +15,16 @@ export default function arena(){
         }
         socket.onmessage = (event)=>{
             const message = JSON.parse(event.data);
+            console.log("The message is as follwoing");
             console.log(message);
-            switch (message){
+            switch (message.type){
                 case "INIT_GAME":
                     alert(message.status);
                     break;
 
                 case "move":
-                    ()=>{
-                        setBoard(message.payload);
-                    }
+                    const newChessboard = message.payload;
+                    setBoard(newChessboard);
                     break;
             }
             

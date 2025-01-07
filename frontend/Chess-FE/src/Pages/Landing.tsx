@@ -1,4 +1,9 @@
+import { useNavigate } from 'react-router-dom';
+
+
 export function Landing(){
+    
+    const navigate = useNavigate();
     return(
     <div className="h-screen w-screen bg-[#393646] flex items-center justify-center gap-80">
         <div className="">
@@ -9,15 +14,9 @@ export function Landing(){
                 <h1 className="text-white text-4xl font-bold">WELCOME TO PLAY CHESS</h1>
             </div>
             <div>
-                <button onClick={joingame} className="bg-[#F4EEE0] rounded-3xl py-5 px-5 font-sans font-bold hover:scale-90" >Enter a game</button>
+                <button onClick={() => navigate('/arena')} className="bg-[#F4EEE0] rounded-3xl py-5 px-5 font-sans font-bold hover:scale-90">Enter a game</button>
             </div>
         </div>
     </div>
     )
-}
-function joingame(){
-    //Join the websocket server.
-    
-    //wait for a new person to join the game.
-    //When a new person joins, 
 }
